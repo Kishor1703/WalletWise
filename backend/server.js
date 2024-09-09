@@ -8,9 +8,7 @@ const app = express();
 
 // Middleware
 app.use(bodyParser.json());
-const cors = require('cors');
 
-const cors = require('cors');
 
 const corsOptions = {
   origin: 'https://wallet-wise-one.vercel.app', // Frontend URL
