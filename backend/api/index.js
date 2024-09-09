@@ -10,15 +10,21 @@ const app = express();
 app.use(bodyParser.json());
 
 
+const cors = require('cors');
+const express = require('express');
+
+// Set CORS before any routes
 const corsOptions = {
   origin: 'https://wallet-wise-one.vercel.app', // Frontend URL
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
-  credentials: true // Enable credentials (if needed)
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true // Enable credentials if required
 };
 
 app.use(cors(corsOptions));
 
+// Body parser middleware (after CORS)
+app.use(express.json());
 
 
 // Routes
