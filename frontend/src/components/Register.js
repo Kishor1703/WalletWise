@@ -2,6 +2,31 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../App.css';
+import logo from'../logo.png'
+
+const styles = {
+  container: {
+    textAlign: 'center',
+    marginTop: '50px',
+  },
+  logoContainer: {
+    marginBottom: '20px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logo: {
+    width: '150px', // Set logo size
+    height: 'auto',
+  },
+  button: {
+    margin: '10px',
+    padding: '10px 20px',
+    fontSize: '16px',
+    cursor: 'pointer',
+  },
+};
+
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -32,6 +57,9 @@ const Register = () => {
 
   return (
     <div className="container">
+      <div style={styles.logoContainer}>
+        <img src={logo} alt="Logo" style={styles.logo} />
+      </div>
       <h1>Welcome to WalletWise!</h1>
       <div className='form'>
       <h2 className='h2'>Register</h2>

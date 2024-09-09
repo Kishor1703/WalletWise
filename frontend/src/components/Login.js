@@ -2,6 +2,31 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../App.css'; // Import your CSS file for styling
+import logo from '../logo.png'; 
+
+const styles = {
+  container: {
+    textAlign: 'center',
+    marginTop: '50px',
+  },
+  logoContainer: {
+    marginBottom: '20px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logo: {
+    width: '150px', // Set logo size
+    height: 'auto',
+  },
+  button: {
+    margin: '10px',
+    padding: '10px 20px',
+    fontSize: '16px',
+    cursor: 'pointer',
+  },
+};
+
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -47,6 +72,9 @@ const Login = () => {
 
   return (
     <div className="container">
+      <div style={styles.logoContainer}>
+        <img src={logo} alt="Logo" style={styles.logo} />
+      </div>
       <h1>Welcome to WalletWise!</h1>
       <div className="form">
         <h2>Login</h2>

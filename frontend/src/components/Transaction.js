@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../App.css'; // Import your CSS file for styling
 import { useNavigate } from 'react-router-dom';
+import logo from'../logo.png'
+
+
 
 const Transactions = () => {
   const [transactions, setTransactions] = useState([]);
@@ -88,8 +91,35 @@ const Transactions = () => {
     return <div>{error}</div>;
   }
 
+  const styles = {
+    container: {
+      textAlign: 'center',
+      marginTop: '50px',
+    },
+    logoContainer: {
+      marginBottom: '20px',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    logo: {
+      width: '150px', // Set logo size
+      height: 'auto',
+    },
+    button: {
+      margin: '10px',
+      padding: '10px 20px',
+      fontSize: '16px',
+      cursor: 'pointer',
+    },
+  };
+  
+
   return (
     <div className='container1'>
+      <div style={styles.logoContainer}>
+        <img src={logo} alt="Logo" style={styles.logo} />
+      </div>
       <h2>Transactions</h2>
       <form onSubmit={handleSubmit}>
         <input
