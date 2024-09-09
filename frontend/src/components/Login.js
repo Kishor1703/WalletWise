@@ -22,7 +22,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true); // Set loading to true when starting the request
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', { username, password });
+      const res = await axios.post('https://wallet-wise-g6b2.vercel.app/api/auth/login', { username, password });
       localStorage.setItem('token', res.data.token);  // Store token in localStorage
       console.log('Token saved:', localStorage.getItem('token'));  // Check if token is saved
       navigate('/transactions');  // Redirect to transactions page

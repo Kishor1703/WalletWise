@@ -14,7 +14,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/register', { username, password, email });
+      const res = await axios.post('https://wallet-wise-g6b2.vercel.app/api/auth/register', { username, password, email });
       localStorage.setItem('token', res.data.token);
       setSuccess('Successfully registered!');
       setTimeout(() => {
