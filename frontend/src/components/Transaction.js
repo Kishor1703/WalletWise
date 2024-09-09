@@ -24,7 +24,7 @@ const Transactions = () => {
           navigate('/login');
           return;
         }
-        const res = await axios.get('http://localhost:5000/api/transactions', {
+        const res = await axios.get('https://wallet-wise-one.vercel.app/', {
           headers: { Authorization: `Bearer ${token}` }
         });
         console.log('Fetched transactions:', res.data); // Debugging
