@@ -10,12 +10,17 @@ const app = express();
 app.use(bodyParser.json());
 const cors = require('cors');
 
+const cors = require('cors');
+
 const corsOptions = {
-  origin: 'https://wallet-wise-one.vercel.app', // Replace with your actual Vercel frontend URL
-  optionsSuccessStatus: 200
+  origin: 'https://wallet-wise-one.vercel.app', // Frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
+  credentials: true // Enable credentials (if needed)
 };
 
 app.use(cors(corsOptions));
+
 
 
 // Routes
