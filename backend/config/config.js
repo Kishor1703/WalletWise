@@ -1,3 +1,3 @@
 module.exports = {
-    jwtSecret: 'your_jwt_secret'
+    jwtSecret: 'kishor'
 };
