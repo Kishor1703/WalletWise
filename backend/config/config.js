@@ -1,3 +1,4 @@
 module.exports = {
-    jwtSecret: 'kishor'
+    jwtSecret: 'kishor',MONGO_URI:""
 };
+

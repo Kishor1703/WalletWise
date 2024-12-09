@@ -75,6 +75,21 @@ const Transactions = () => {
     navigate('/login');
   };
 
+  const handleDelete = async (id) => {
+    try {
+        console.log(`Deleting transaction with ID: ${id}`);
+        const token = localStorage.getItem('token');
+        await axios.delete(`https://wallet-wise-g6b2.vercel.app/api/transactions/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        setTransactions(transactions.filter((transaction) => transaction._id !== id));
+    } catch (error) {
+        console.error('Error deleting transaction:', error.response?.data?.msg || error.message);
+        alert(error.response?.data?.msg || 'Error deleting transaction.');
+    }
+};
+
+
   const groupedTransactions = transactions.reduce((acc, transaction) => {
     if (!acc[transaction.person]) {
       acc[transaction.person] = [];
@@ -171,6 +186,12 @@ const Transactions = () => {
                   <li key={transaction._id}>
                     {transaction.amount} - {transaction.category} ({transaction.type})
                     {transaction.description && `: ${transaction.description}`}
+                    <button 
+            onClick={() => handleDelete(transaction._id)} 
+            style={{ marginLeft: '10px', cursor: 'pointer' }}
+        >
+            Delete
+        </button>
                   </li>
                 ))}
               </ul>

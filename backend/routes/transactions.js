@@ -25,6 +25,29 @@ router.post('/', auth, async (req, res) => {
     }
 });
 
+router.delete('/:id', auth, async (req, res) => {
+    try {
+        console.log(`Delete request received for ID: ${req.params.id}`);
+        const transaction = await Transaction.findById(req.params.id);
+
+        if (!transaction) {
+            console.log('Transaction not found');
+            return res.status(404).json({ msg: 'Transaction not found' });
+        }
+
+        if (transaction.user.toString() !== req.user.id) {
+            console.log('Unauthorized user');
+            return res.status(401).json({ msg: 'User not authorized' });
+        }
+
+        await transaction.remove();
+        res.json({ msg: 'Transaction removed successfully' });
+    } catch (err) {
+        console.error('Error deleting transaction:', err.message);
+        res.status(500).send('Server error');
+    }
+});
+
 // Get all transactions
 router.get('/', auth, async (req, res) => {
     try {
