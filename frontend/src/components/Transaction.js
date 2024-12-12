@@ -6,7 +6,7 @@ import logo from '../logo.png';
 const Transactions = () => {
   const [transactions, setTransactions] = useState([]);
   const [amount, setAmount] = useState('');
-  const [type, setType] = useState('income');
+  const [type, setType] = useState('');
   const [description, setDescription] = useState('');
   const [person, setPerson] = useState('');
   const [selectedPerson, setSelectedPerson] = useState(null);
