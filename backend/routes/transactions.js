@@ -25,28 +25,33 @@ router.post('/', auth, async (req, res) => {
     }
 });
 
-router.delete('/:id', auth, async (req, res) => {
-    try {
-        console.log(`Delete request received for ID: ${req.params.id}`);
-        const transaction = await Transaction.findById(req.params.id);
+// router.delete('/:id', auth, async (req, res) => {
+//     try {
+//         console.log(`Delete request received for transaction ID: ${req.params.id}`);
 
-        if (!transaction) {
-            console.log('Transaction not found');
-            return res.status(404).json({ msg: 'Transaction not found' });
-        }
+//         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+//             return res.status(400).json({ msg: 'Invalid transaction ID' });
+//         }
 
-        if (transaction.user.toString() !== req.user.id) {
-            console.log('Unauthorized user');
-            return res.status(401).json({ msg: 'User not authorized' });
-        }
+//         const transaction = await Transaction.findById(req.params.id);
+//         if (!transaction) {
+//             return res.status(404).json({ msg: 'Transaction not found' });
+//         }
 
-        await transaction.remove();
-        res.json({ msg: 'Transaction removed successfully' });
-    } catch (err) {
-        console.error('Error deleting transaction:', err.message);
-        res.status(500).send('Server error');
-    }
-});
+//         if (transaction.user.toString() !== req.user.id) {
+//             return res.status(401).json({ msg: 'User not authorized' });
+//         }
+
+//         await transaction.remove();
+//         console.log(`Transaction with ID ${req.params.id} deleted successfully`);
+//         res.json({ msg: 'Transaction deleted successfully' });
+//     } catch (err) {
+//         console.error('Server error during delete:', err.message);
+//         res.status(500).send('Server error');
+//     }
+// });
+
+
 
 // Get all transactions
 router.get('/', auth, async (req, res) => {

@@ -1,32 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import '../App.css';
-import logo from'../logo.png'
-
-const styles = {
-  container: {
-    textAlign: 'center',
-    marginTop: '50px',
-  },
-  logoContainer: {
-    marginBottom: '20px',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  logo: {
-    width: '150px', // Set logo size
-    height: 'auto',
-  },
-  button: {
-    margin: '10px',
-    padding: '10px 20px',
-    fontSize: '16px',
-    cursor: 'pointer',
-  },
-};
-
+import logo from '../logo.png';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -39,63 +14,58 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('https://wallet-wise-g6b2.vercel.app/api/auth/register', { username, password, email }, { headers: { 'Content-Type': 'application/json' }});
+      const res = await axios.post('https://wallet-wise-g6b2.vercel.app/api/auth/register', { username, password, email });
       localStorage.setItem('token', res.data.token);
       setSuccess('Successfully registered!');
       setTimeout(() => {
         navigate('/login');
-      }, 2000); // Redirect to login page after 2 seconds
+      }, 2000);
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.message) {
-        setError(error.response.data.message);
-      } else {
-        setError('Registration failed. Please try again.');
-      }
-      console.error('Registration error:', error.response?.data?.message || error.message);
+      setError(error.response?.data?.message || 'Registration failed. Please try again.');
     }
   };
 
   return (
-    <div className="container">
-      <div style={styles.logoContainer}>
-        <img src={logo} alt="Logo" style={styles.logo} />
-      </div>
-      <h1>Welcome to WalletWise!</h1>
-      <div className='form'>
-      <h2 className='h2'>Register</h2>
-      <form  onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className='input-field'
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className='input-field'
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className='input-field'
-          required
-        />
-        <button type="submit" className='button1'>Register</button>
-      </form>
-      {error && <p className="error">{error}</p>}
-      {success && <p className="success">{success}</p>}
-      </div>
-      <p className="register-link">
-          Already registered? <a href="/login">Login here</a>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <img src={logo} alt="Logo" className="w-32 mb-4" />
+      <h1 className="text-3xl font-semibold mb-4">Welcome to WalletWise!</h1>
+      <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
+        <h2 className="text-xl font-bold mb-4">Register</h2>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            className="border border-gray-300 rounded-lg p-2 mb-4 w-full"
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="border border-gray-300 rounded-lg p-2 mb-4 w-full"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="border border-gray-300 rounded-lg p-2 mb-4 w-full"
+          />
+          <button type="submit" className="bg-blue-500 text-white rounded-lg p-2 w-full hover:bg-blue-600 transition duration-200">
+            Register
+          </button>
+        </form>
+        {error && <p className="text-red-500 mt-4">{error}</p>}
+        {success && <p className="text-green-500 mt-4">{success}</p>}
+        <p className="mt-4 text-center">
+          Already registered? <a href="/login" className="text-blue-500 hover:underline">Login here</a>
         </p>
+      </div>
     </div>
   );
 };
