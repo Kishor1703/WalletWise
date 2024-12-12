@@ -6,7 +6,8 @@ import logo from '../logo.png';
 const Transactions = () => {
   const [transactions, setTransactions] = useState([]);
   const [amount, setAmount] = useState('');
-  const [type, setType] = useState('');
+  const [category, setCategory] = useState('');
+  const [type, setType] = useState('income');
   const [description, setDescription] = useState('');
   const [person, setPerson] = useState('');
   const [selectedPerson, setSelectedPerson] = useState(null);
@@ -59,6 +60,7 @@ const Transactions = () => {
 
   const resetForm = () => {
     setAmount('');
+    setCategory('');
     setType('income');
     setDescription('');
     setPerson('');
@@ -116,8 +118,8 @@ const Transactions = () => {
           <input type='number' placeholder='Amount' value={amount} onChange={(e) => setAmount(e.target.value)} required 
             className='w-full p-3 mb-4 border rounded bg-gray-100 text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500' />
 
-          {/* <input type='text' placeholder='Category' value={category} onChange={(e) => setCategory(e.target.value)} 
-            className='w-full p-3 mb-4 border rounded bg-gray-100 text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500' /> */}
+          <input type='text' placeholder='Category' value={category} onChange={(e) => setCategory(e.target.value)} 
+            className='w-full p-3 mb-4 border rounded bg-gray-100 text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500' />
 
           <select value={type} onChange={(e) => setType(e.target.value)} 
             className='w-full p-3 mb-4 border rounded bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500'>
@@ -148,7 +150,7 @@ const Transactions = () => {
                 <ul className='mt-2'>
                   {groupedTransactions[personName].map((transaction) => (
                     <li key={transaction._id} className='py-2 flex justify-between'>
-                      <span>{transaction.amount} - ({transaction.type})</span>
+                      <span>{transaction.amount} - {transaction.category} ({transaction.type})</span>
                       <button 
                         onClick={() => handleDelete(transaction._id)} 
                         className='p-2 bg-red-500 text-white rounded hover:bg-red-400'>Delete</button>
