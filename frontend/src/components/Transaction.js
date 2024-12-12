@@ -6,7 +6,6 @@ import logo from '../logo.png';
 const Transactions = () => {
   const [transactions, setTransactions] = useState([]);
   const [amount, setAmount] = useState('');
-  const [category, setCategory] = useState('');
   const [type, setType] = useState('income');
   const [description, setDescription] = useState('');
   const [person, setPerson] = useState('');
@@ -60,7 +59,6 @@ const Transactions = () => {
 
   const resetForm = () => {
     setAmount('');
-    setCategory('');
     setType('income');
     setDescription('');
     setPerson('');
