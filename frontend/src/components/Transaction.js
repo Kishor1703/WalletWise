@@ -7,7 +7,7 @@ const Transactions = () => {
   const [transactions, setTransactions] = useState([]);
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('');
-  const [type, setType] = useState('');
+  const [type, setType] = useState('income');
   const [description, setDescription] = useState('');
   const [person, setPerson] = useState('');
   const [selectedPerson, setSelectedPerson] = useState(null);

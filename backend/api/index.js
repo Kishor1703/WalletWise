@@ -18,7 +18,7 @@ const corsOptions = {
   credentials: true // Enable credentials if required
 };
 
-app.use(cors);
+app.use(cors(corsOptions));
 
 // Body parser middleware (after CORS)
 app.use(express.json());
