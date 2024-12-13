@@ -121,11 +121,11 @@ const Transactions = () => {
           <input type='text' placeholder='Category' value={category} onChange={(e) => setCategory(e.target.value)} 
             className='w-full p-3 mb-4 border rounded bg-gray-100 text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500' />
 
-          <select value={type} onChange={(e) => setType(e.target.value)} 
-            className='w-full p-3 mb-4 border rounded bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500'>
-            <option value='income'>Money Gave</option>
-            <option value='expense'>Return</option>
-          </select>
+<select value={type} onChange={(e) => setType(e.target.value)} 
+  className='w-full p-3 mb-4 border rounded bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500'>
+  <option value='Money Gave'>Money Gave</option>
+  <option value='Return'>Return</option>
+</select>
 
           <input type='text' placeholder='Description' value={description} onChange={(e) => setDescription(e.target.value)} 
             className='w-full p-3 mb-4 border rounded bg-gray-100 text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500' />
@@ -151,9 +151,9 @@ const Transactions = () => {
                   {groupedTransactions[personName].map((transaction) => (
                     <li key={transaction._id} className='py-2 flex justify-between'>
                       <span>{transaction.amount} - {transaction.category} ({transaction.type})</span>
-                      <button 
+                      {/* <button 
                         onClick={() => handleDelete(transaction._id)} 
-                        className='p-2 bg-red-500 text-white rounded hover:bg-red-400'>Delete</button>
+                        className='p-2 bg-red-500 text-white rounded hover:bg-red-400'>Delete</button> */}
                     </li>
                   ))}
                 </ul>
