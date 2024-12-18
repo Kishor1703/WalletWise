@@ -43,5 +43,5 @@
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17"
   },
-  "proxy": "https://wallet-wise-g6b2.vercel.app/"
+  "proxy": "https://wallet-wise-one.vercel.app/"
 }
