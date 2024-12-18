@@ -8,7 +8,17 @@ const app = express();
 
 // Middleware
 app.use(bodyParser.json());
-app.use(cors());
+const cors = require('cors');
+
+// Allow specific origins
+const corsOptions = {
+  origin: ['https://wallet-wise-one.vercel.app/'], // Add your allowed origins here
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true, // If you need cookies or authorization headers
+};
+
+app.use(cors(corsOptions));
+
 
 // Routes
 app.use('/api/auth', require('../routes/auth'));
