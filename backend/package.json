@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-     "start": "node app.js",  
+    "start": "node app.js",
     "dev": "nodemon app.js"
   },
   "keywords": [],
@@ -17,10 +17,9 @@
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.468.0",
     "mongod": "^2.0.0",
     "mongoose": "^8.4.3",
     "react-scripts": "^5.0.1"
   }
- 
-  
 }

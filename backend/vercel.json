@@ -1,8 +1,28 @@
 {
     "version": 2,
-    "rewrites": [{
-      "source": "/(.*)",
-      "destination": "/api"
-    }]
+    "name": "walletwise",
+    "builds": [
+      {
+        "src": "/api/(.*)",
+        "use": "@vercel/node"
+      },
+      {
+        "src": "frontend/package.json", 
+        "use": "@vercel/static-build",
+        "config": {
+          "distDir": "build"  
+        }
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/(.*)", 
+        "dest": "/backend/api/server.js"  
+      },
+      {
+        "src": "/(.*)",  
+        "dest": "/frontend/build/$1"
+      }
+    ]
   }
   
