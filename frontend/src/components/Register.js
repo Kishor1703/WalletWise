@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import MyImage from '../assets/logo.png';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -32,6 +33,7 @@ const Register = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="max-w-md w-full bg-white p-8 rounded-xl shadow-lg">
+        <img src={MyImage} alt="Description of the image" style={{ width: '150px', height: 'auto' }} className='ml-28'/>
         <h1 className="text-4xl font-extrabold text-center text-gray-700 mb-6">Welcome to WalletWise!</h1>
         
         <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">Register</h2>
