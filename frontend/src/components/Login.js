@@ -11,13 +11,13 @@ const Login = () => {
   const [loading, setLoading] = useState(false); // New loading state
   const navigate = useNavigate();
 
-  // Check if user is already logged in
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      navigate('/transactions');
-    }
-  }, [navigate]);
+  // // Check if user is already logged in
+  // useEffect(() => {
+  //   const token = localStorage.getItem('token');
+  //   if (token) {
+  //     navigate('/transactions');
+  //   }
+  // }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
