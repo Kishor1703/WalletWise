@@ -1,19 +1,24 @@
-import jwt_decode from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 
-const token = localStorage.getItem('token');
-if (token) {
-    const decodedToken = jwt_decode(token);
-    console.log('Decoded token:', decodedToken);
+export const isAuthenticated = () => {
+  const token = localStorage.getItem('token');
+  if (!token) return false;
 
-    // Check for token expiration
+  try {
+    const decodedToken = jwtDecode(token);
+
+    // Check token expiration
     const currentTime = Date.now() / 1000; // Current time in seconds
     if (decodedToken.exp < currentTime) {
-        console.error('Token has expired.');
-        alert('Session expired. Please log in again.');
-        localStorage.removeItem('token');
-        navigate('/login');
+      console.error('Token has expired.');
+      localStorage.removeItem('token');
+      return false;
     }
-}
-axios.get('https://wallet-wise-g6b2.vercel.app/api/transactions', {
-    headers: { Authorization: `Bearer ${token}` },
-});
+
+    return true; // Token is valid and not expired
+  } catch (error) {
+    console.error('Invalid token:', error);
+    localStorage.removeItem('token');
+    return false;
+  }
+};

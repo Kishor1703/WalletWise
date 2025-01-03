@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown, ChevronUp, Trash2, LogOut } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Transactions = () => {
   const [transactions, setTransactions] = useState([]);
@@ -83,7 +84,7 @@ const Transactions = () => {
 
   const groupedTransactions = transactions.reduce((acc, transaction) => {
     if (!acc[transaction.person]) {
-      acc[transaction.person] = { transactions: [], lending: 0, returning: 0 };
+      acc[transaction.person] = { transactions: [], lending: 0, returning: 0, income: 0, expense: 0 };
     }
     acc[transaction.person].transactions.push(transaction);
 
@@ -91,6 +92,10 @@ const Transactions = () => {
       acc[transaction.person].lending += transaction.amount;
     } else if (transaction.type === 'returning') {
       acc[transaction.person].returning += transaction.amount;
+    } else if (transaction.type === 'income') {
+      acc[transaction.person].income += transaction.amount;
+    } else if (transaction.type === 'expense') {
+      acc[transaction.person].expense += transaction.amount;
     }
     return acc;
   }, {});
@@ -116,11 +121,10 @@ const Transactions = () => {
   }
 
   return (
-    
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto bg-white shadow-2xl rounded-2xl overflow-hidden">
         <div className="p-8 bg-gradient-to-r from-blue-600 to-blue-400">
-        <h2 className="text-4xl font-extrabold text-white text-center tracking-tight">
+          <h2 className="text-4xl font-extrabold text-white text-center tracking-tight">
             WalletWise
           </h2>
           <h2 className="text-2xl font-extrabold text-white text-center tracking-tight">
@@ -129,8 +133,17 @@ const Transactions = () => {
         </div>
 
         <div className="p-8 space-y-8">
-          <form 
-            onSubmit={handleSubmit} 
+          <div className="flex justify-between">
+            <Link
+              to="/report"
+              className="text-blue-600 font-semibold hover:text-blue-800 transition duration-200"
+            >
+              Go to Report Page
+            </Link>
+          </div>
+
+          <form
+            onSubmit={handleSubmit}
             className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 p-6 rounded-xl shadow-inner"
           >
             <div className="space-y-2">
@@ -209,33 +222,53 @@ const Transactions = () => {
             </h3>
 
             {Object.keys(groupedTransactions).map((personName) => {
-              const { transactions, lending, returning } = groupedTransactions[personName];
-              const balance = lending - returning;
+              const { transactions, lending, returning, income, expense } = groupedTransactions[personName];
+              const balance = lending - returning + income - expense;
 
               return (
-                <div 
-                  key={personName} 
+                <div
+                  key={personName}
                   className="bg-white border border-gray-200 rounded-xl shadow-md overflow-hidden"
                 >
-                  <div 
+                  <div
                     onClick={() => setSelectedPerson(selectedPerson === personName ? null : personName)}
                     className="flex justify-between items-center p-6 cursor-pointer hover:bg-gray-50 transition duration-300"
                   >
                     <div>
                       <h4 className="text-xl font-semibold text-gray-800">{personName}</h4>
-                      <span className={`text-sm font-medium ${balance > 0 ? 'text-red-600' : 'text-green-600'}`}>
+                      {/* <span className={`text-sm font-medium ${balance > 0 ? 'text-red-600' : 'text-green-600'}`}>
                         {balance > 0 ? `${balance} to be returned` : 'Settled'}
-                      </span>
+                      </span> */}
                     </div>
                     {selectedPerson === personName ? <ChevronUp className="text-gray-500" /> : <ChevronDown className="text-gray-500" />}
                   </div>
 
                   {selectedPerson === personName && (
                     <div className="bg-gray-50 p-4 space-y-3">
+                      <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm">
+                        <div>
+                          <h5 className="font-medium text-gray-800">Income and Expense</h5>
+                          <div className="flex justify-between text-sm text-gray-600">
+                            <span>Income: {income}</span>
+                            <span>Expense: {expense}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm mt-4">
+                        <div>
+                          <h5 className="font-medium text-gray-800">Lending and Returning</h5>
+                          <div className="flex justify-between text-sm text-gray-600">
+                            <span>Lending: {lending}</span>
+                            <span>Returning: {returning}</span>
+                          </div>
+                        </div>
+                      </div>
+
                       {transactions.map((transaction) => (
-                        <div 
-                          key={transaction._id} 
-                          className="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm"
+                        <div
+                          key={transaction._id}
+                          className="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm mt-4"
                         >
                           <div>
                             <span className="font-medium text-gray-800">{transaction.amount}</span>
@@ -244,11 +277,11 @@ const Transactions = () => {
                               {transaction.description && `: ${transaction.description}`}
                             </span>
                           </div>
-                          <button 
+                          <button
                             onClick={() => deleteTransaction(transaction._id)}
                             className="text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full p-2 transition duration-300"
                           >
-                            <Trash2 size={20} />
+                            <Trash2 className="w-5 h-5" />
                           </button>
                         </div>
                       ))}
@@ -258,17 +291,17 @@ const Transactions = () => {
               );
             })}
           </div>
-
-          <button
-            onClick={handleLogout}
-            className="w-full py-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center space-x-2"
-          >
-            <LogOut className="mr-2" /> Logout
-          </button>
         </div>
       </div>
+      <div className="fixed bottom-8 right-8">
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 text-white p-4 rounded-full shadow-lg hover:bg-red-600 transition duration-300"
+        >
+          <LogOut className="w-6 h-6" />
+        </button>
+      </div>
     </div>
-    
   );
 };
 
