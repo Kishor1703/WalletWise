@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const config = require('../config/config');
-
+const nodemailer = require('nodemailer');
+const cron=require('node-cron');
 const app = express();
 
 
@@ -43,6 +44,40 @@ mongoose.connect('mongodb+srv://kishor:kishor2004@user.fzngpux.mongodb.net/?retr
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.log(err));
 
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL, // Your email
+    pass: process.env.PASSWORD, // Your email password
+  },
+});
+
+// Schedule a weekly task
+cron.schedule('0 9 * * *', async () => {
+  // Logic to fetch pending lendings
+  const transactions = await Transaction.find({ type: 'lending', isPaid: false });
+
+  transactions.forEach((transaction) => {
+    const message = `Reminder: You have to return Rs.${transaction.amount} to ${transaction.lenderName}.`;
+
+    // Send email (or other notifications like SMS)
+    transporter.sendMail(
+      {
+        from: 'kishor123443211234@gmail.com',
+        to: transaction.borrowerEmail, // Email of the borrower
+        subject: 'Weekly Reminder',
+        text: message,
+      },
+      (err, info) => {
+        if (err) {
+          console.error(`Failed to send email to ${transaction.borrowerEmail}:`, err);
+        } else {
+          console.log(`Reminder sent to ${transaction.borrowerEmail}:`, info.response);
+        }
+      }
+    );
+  });
+});
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

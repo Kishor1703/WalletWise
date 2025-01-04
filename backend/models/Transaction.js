@@ -6,6 +6,7 @@ const transactionSchema = new mongoose.Schema({
   category: String,
   type: { type: String, enum: ['income', 'expense', 'lending', 'returning'], required: true },
   description: String,
+  email: { type: String, required: true, match: /.+\@.+\..+/ },
   person: String,
   date: { type: Date, default: Date.now },
 });

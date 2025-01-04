@@ -140,6 +140,13 @@ const Transactions = () => {
             >
               Go to Report Page
             </Link>
+            <Link
+  to="/lending-returning"
+  className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700"
+>
+  Add Lending/Returning
+</Link>
+
           </div>
 
           <form
@@ -236,39 +243,19 @@ const Transactions = () => {
                   >
                     <div>
                       <h4 className="text-xl font-semibold text-gray-800">{personName}</h4>
-                      {/* <span className={`text-sm font-medium ${balance > 0 ? 'text-red-600' : 'text-green-600'}`}>
+                      <span className={`text-sm font-medium ${balance > 0 ? 'text-red-600' : 'text-green-600'}`}>
                         {balance > 0 ? `${balance} to be returned` : 'Settled'}
-                      </span> */}
+                      </span>
                     </div>
                     {selectedPerson === personName ? <ChevronUp className="text-gray-500" /> : <ChevronDown className="text-gray-500" />}
                   </div>
 
                   {selectedPerson === personName && (
                     <div className="bg-gray-50 p-4 space-y-3">
-                      <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm">
-                        <div>
-                          <h5 className="font-medium text-gray-800">Income and Expense</h5>
-                          <div className="flex justify-between text-sm text-gray-600">
-                            <span>Income: {income}</span>
-                            <span>Expense: {expense}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm mt-4">
-                        <div>
-                          <h5 className="font-medium text-gray-800">Lending and Returning</h5>
-                          <div className="flex justify-between text-sm text-gray-600">
-                            <span>Lending: {lending}</span>
-                            <span>Returning: {returning}</span>
-                          </div>
-                        </div>
-                      </div>
-
                       {transactions.map((transaction) => (
                         <div
                           key={transaction._id}
-                          className="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm mt-4"
+                          className="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm"
                         >
                           <div>
                             <span className="font-medium text-gray-800">{transaction.amount}</span>

@@ -5,7 +5,8 @@ import Register from './components/Register';
 import Transactions from './components/Transaction'; // Assuming this component exists
 import PrivateRoute from './components/PrivateRoute'; // Path to your PrivateRoute component
 import Report from './components/Reports'; // Import the new Report component
-import Profile from './components/Profile'; // Import the new Profile component
+// import Profile from './components/Profile'; // Import the new Profile component
+import LendingReturning from './components/LendingReturning';
 
 const App = () => {
   return (
@@ -22,10 +23,11 @@ const App = () => {
           path="/report"
           element={<PrivateRoute component={Report} />} // Add Route for Report
         />
-        <Route
+        {/* <Route
           path="/profile"
           element={<PrivateRoute component={Profile} />} // Add Route for Profile
-        />
+        /> */}
+        <Route path="/lending-returning" element={<LendingReturning />} />
       </Routes>
     </Router>
   );
