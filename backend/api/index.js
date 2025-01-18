@@ -63,7 +63,7 @@ cron.schedule('0 9 * * *', async () => {
     // Send email (or other notifications like SMS)
     transporter.sendMail(
       {
-        from: 'kishor123443211234@gmail.com',
+        from: process.env.EMAIL,
         to: transaction.borrowerEmail, // Email of the borrower
         subject: 'Weekly Reminder',
         text: message,
