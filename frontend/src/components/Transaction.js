@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import { ChevronDown, ChevronUp, Trash2, LogOut } from 'lucide-react';
 
 const Transactions = () => {
   const [transactions, setTransactions] = useState([]);
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('');
-  const [type, setType] = useState('income');
+  const [type, setType] = useState('lending');
   const [description, setDescription] = useState('');
   const [person, setPerson] = useState('');
   const [selectedPerson, setSelectedPerson] = useState(null);
@@ -34,6 +36,7 @@ const Transactions = () => {
           navigate('/login');
         } else {
           setError('Failed to fetch transactions.');
+          toast.error('Failed to fetch transactions.');
         }
       } finally {
         setLoading(false);
@@ -50,16 +53,18 @@ const Transactions = () => {
       const res = await axios.post(
         'https://wallet-wise-g6b2.vercel.app/api/transactions',
         { amount, category, type, description, person },
-        { headers: { Authorization: `Bearer ${token}` } },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       setTransactions([...transactions, res.data]);
       setAmount('');
       setCategory('');
-      setType('income');
+      setType('lending');
       setDescription('');
       setPerson('');
+      toast.success('Transaction added successfully.');
     } catch (error) {
       setError('Error adding transaction');
+      toast.error('Error adding transaction.');
       console.error(error.response?.data?.message || error.message);
     }
   };
@@ -71,14 +76,16 @@ const Transactions = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTransactions(transactions.filter((transaction) => transaction._id !== id));
+      toast.success('Transaction deleted successfully.');
     } catch (error) {
-      console.error('Error deleting transaction:', error.response?.data?.message || error.message);
+      toast.error('Error deleting transaction.');
     }
   };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
+    toast.info('Logged out successfully.');
   };
 
   const groupedTransactions = transactions.reduce((acc, transaction) => {
@@ -86,7 +93,6 @@ const Transactions = () => {
       acc[transaction.person] = { transactions: [], lending: 0, returning: 0 };
     }
     acc[transaction.person].transactions.push(transaction);
-
     if (transaction.type === 'lending') {
       acc[transaction.person].lending += transaction.amount;
     } else if (transaction.type === 'returning') {
@@ -95,180 +101,181 @@ const Transactions = () => {
     return acc;
   }, {});
 
+  const totalLending = transactions
+    .filter((t) => t.type === 'lending')
+    .reduce((sum, t) => sum + t.amount, 0);
+
+  const totalReturning = transactions
+    .filter((t) => t.type === 'returning')
+    .reduce((sum, t) => sum + t.amount, 0);
+
+  const chartData = [
+    { name: 'Lending', value: totalLending },
+    { name: 'Returning', value: totalReturning },
+  ];
+
+  const COLORS = ['#0088FE', '#00C49F'];
+
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-50 to-blue-100">
-        <div className="text-center text-2xl font-semibold text-blue-600 animate-pulse">
-          Loading transactions...
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-red-50 to-red-100">
-        <div className="text-center text-2xl font-semibold text-red-600">
-          {error}
-        </div>
+        <p className="text-blue-600 text-2xl font-semibold animate-pulse">Loading transactions...</p>
       </div>
     );
   }
 
   return (
-    
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto bg-white shadow-2xl rounded-2xl overflow-hidden">
-        <div className="p-8 bg-gradient-to-r from-blue-600 to-blue-400">
-        <h2 className="text-4xl font-extrabold text-white text-center tracking-tight">
-            WalletWise
-          </h2>
-          <h2 className="text-2xl font-extrabold text-white text-center tracking-tight">
-            Transaction Tracker
-          </h2>
+        <div className="p-6 bg-gradient-to-r from-blue-600 to-blue-400 text-white text-center">
+          <h1 className="text-3xl font-bold">WalletWise - Transaction Tracker</h1>
         </div>
 
-        <div className="p-8 space-y-8">
-          <form 
-            onSubmit={handleSubmit} 
-            className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 p-6 rounded-xl shadow-inner"
-          >
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">Amount</label>
-              <input
-                type="number"
-                placeholder="Enter amount"
-                value={amount}
-                onChange={(e) => setAmount(Number(e.target.value))}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">Category</label>
-              <input
-                type="text"
-                placeholder="Enter category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">Transaction Type</label>
-              <select
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
-              >
-                <option value="income">Income</option>
-                <option value="expense">Expense</option>
-                <option value="lending">Lending</option>
-                <option value="returning">Returning</option>
-              </select>
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">Description</label>
-              <input
-                type="text"
-                placeholder="Enter description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
-              />
-            </div>
-
-            <div className="space-y-2 md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700">Person's Name</label>
-              <input
-                type="text"
-                placeholder="Enter person's name"
-                value={person}
-                onChange={(e) => setPerson(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
-                required
-              />
-            </div>
-
-            <div className="md:col-span-2">
-              <button
-                type="submit"
-                className="w-full py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-300 ease-in-out transform hover:scale-105"
-              >
-                Add Transaction
-              </button>
-            </div>
-          </form>
-
-          <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-gray-800 border-b-2 border-blue-500 pb-2">
-              People
-            </h3>
-
-            {Object.keys(groupedTransactions).map((personName) => {
-              const { transactions, lending, returning } = groupedTransactions[personName];
-              const balance = lending - returning;
-
-              return (
-                <div 
-                  key={personName} 
-                  className="bg-white border border-gray-200 rounded-xl shadow-md overflow-hidden"
+        {/* Summary Chart */}
+        <div className="p-6">
+          <h2 className="text-xl font-semibold mb-4 text-gray-700">Overall Summary</h2>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+            <div>
+              <PieChart width={300} height={300}>
+                <Pie
+                  data={chartData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                  outerRadius={100}
+                  fill="#8884d8"
+                  dataKey="value"
                 >
-                  <div 
-                    onClick={() => setSelectedPerson(selectedPerson === personName ? null : personName)}
-                    className="flex justify-between items-center p-6 cursor-pointer hover:bg-gray-50 transition duration-300"
-                  >
-                    <div>
-                      <h4 className="text-xl font-semibold text-gray-800">{personName}</h4>
-                      <span className={`text-sm font-medium ${balance > 0 ? 'text-red-600' : 'text-green-600'}`}>
-                        {balance > 0 ? `${balance} to be returned` : 'Settled'}
-                      </span>
-                    </div>
-                    {selectedPerson === personName ? <ChevronUp className="text-gray-500" /> : <ChevronDown className="text-gray-500" />}
-                  </div>
-
-                  {selectedPerson === personName && (
-                    <div className="bg-gray-50 p-4 space-y-3">
-                      {transactions.map((transaction) => (
-                        <div 
-                          key={transaction._id} 
-                          className="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm"
-                        >
-                          <div>
-                            <span className="font-medium text-gray-800">{transaction.amount}</span>
-                            <span className="text-sm text-gray-600 ml-2">
-                              {transaction.category} ({transaction.type})
-                              {transaction.description && `: ${transaction.description}`}
-                            </span>
-                          </div>
-                          <button 
-                            onClick={() => deleteTransaction(transaction._id)}
-                            className="text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full p-2 transition duration-300"
-                          >
-                            <Trash2 size={20} />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                  {chartData.map((_, index) => (
+                    <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </div>
+            <div className="text-gray-700">
+              <p className="text-lg">Total Lending: ₹{totalLending}</p>
+              <p className="text-lg">Total Returning: ₹{totalReturning}</p>
+              <p
+                className={`font-bold ${
+                  totalLending - totalReturning > 0 ? 'text-red-600' : 'text-green-600'
+                }`}
+              >
+                Net: ₹{totalLending - totalReturning}
+              </p>
+            </div>
           </div>
+        </div>
 
+        {/* Transaction Form */}
+        <div className="p-6">
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <input
+              type="number"
+              placeholder="Amount"
+              value={amount}
+              onChange={(e) => setAmount(Number(e.target.value))}
+              required
+              className="border px-4 py-2 rounded-md"
+            />
+            <input
+              type="text"
+              placeholder="Category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              required
+              className="border px-4 py-2 rounded-md"
+            />
+            <select
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+              className="border px-4 py-2 rounded-md"
+            >
+              <option value="lending">Lending</option>
+              <option value="returning">Returning</option>
+            </select>
+            <input
+              type="text"
+              placeholder="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="border px-4 py-2 rounded-md"
+            />
+            <input
+              type="text"
+              placeholder="Person"
+              value={person}
+              onChange={(e) => setPerson(e.target.value)}
+              required
+              className="border px-4 py-2 rounded-md col-span-2"
+            />
+            <button
+              type="submit"
+              className="col-span-2 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700"
+            >
+              Add Transaction
+            </button>
+          </form>
+        </div>
+
+        {/* Transaction List */}
+        <div className="p-6">
+          {Object.entries(groupedTransactions).map(([person, data]) => (
+            <div key={person} className="mb-6 p-4 border rounded-lg bg-gray-50">
+              <div
+                onClick={() =>
+                  setSelectedPerson(selectedPerson === person ? null : person)
+                }
+                className="flex justify-between items-center cursor-pointer"
+              >
+                <h3 className="text-lg font-semibold">{person}</h3>
+                {selectedPerson === person ? <ChevronUp /> : <ChevronDown />}
+              </div>
+              {selectedPerson === person && (
+                <div className="mt-2">
+                  {data.transactions.map((t) => (
+                    <div key={t._id} className="flex justify-between items-center py-1">
+                      <div>
+                        <p className="text-gray-800">
+                          ₹{t.amount} - {t.category}
+                        </p>
+                        {t.description && (
+                          <p className="text-sm text-gray-500">{t.description}</p>
+                        )}
+                      </div>
+                      <button
+                        onClick={() => deleteTransaction(t._id)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                  ))}
+                  <div className="text-sm text-gray-600 mt-2">
+                    <p>Lent: ₹{data.lending}</p>
+                    <p>Returned: ₹{data.returning}</p>
+                    <p className={`font-semibold ${data.lending - data.returning > 0 ? 'text-red-600' : 'text-green-600'}`}>
+                      Net: ₹{data.lending - data.returning}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div className="flex justify-center mb-6">
           <button
             onClick={handleLogout}
-            className="w-full py-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center space-x-2"
+            className="bg-red-500 text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-red-600"
           >
-            <LogOut className="mr-2" /> Logout
+            <LogOut size={18} /> Logout
           </button>
         </div>
       </div>
     </div>
-    
   );
 };
 
