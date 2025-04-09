@@ -36,7 +36,7 @@ app.use('/api/auth', require('../routes/auth'));
 app.use('/api/transactions', require('../routes/transactions'));
 
 // Database connection
-mongoose.connect('mongodb+srv://kishor:kishor2004@user.fzngpux.mongodb.net/?retryWrites=true&w=majority&appName=user', {
+mongoose.connect(process.env.URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
