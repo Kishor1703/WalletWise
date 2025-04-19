@@ -11,7 +11,12 @@ const app = express();
 app.use(bodyParser.json());
 
 // Allow specific origins
-const allowedOrigins = ['http://localhost:3000', 'https://wallet-wise-one.vercel.app'];
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://wallet-wise-one.vercel.app',
+  'https://wallet-wise-g6b2.vercel.app'
+];
+
 
 const corsOptions = {
   origin: (origin, callback) => {
