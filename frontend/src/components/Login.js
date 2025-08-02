@@ -23,7 +23,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true); // Set loading to true when starting the request
     try {
-      const res = await axios.post('https://wallet-wise-one.vercel.app/api/auth/login', { username, password });
+      const res = await axios.post('https://wallet-wise-g6b2.vercel.app/api/auth/login', { username, password });
       localStorage.setItem('token', res.data.token);  // Store token in localStorage
       navigate('/transactions');  // Redirect to transactions page
     } catch (error) {
