@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const config = require('../config/config');
+const config = require('./config/config');
 const app = express();
 
 
@@ -36,8 +36,8 @@ app.options('*', cors(corsOptions)); // Handle preflight requests
 
 
 // Routes
-app.use('/api/auth', require('../routes/auth'));
-app.use('/api/transactions', require('../routes/transactions'));
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/transactions', require('./routes/transactions'));
 
 require('dotenv').config();
 
