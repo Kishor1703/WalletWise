@@ -14,6 +14,6 @@ if (token) {
         navigate('/login');
     }
 }
-axios.get('https://localhost:5000/api/transactions', {
+axios.get('https://walletwise-backend-ls6d.onrender.com/api/transactions', {
     headers: { Authorization: `Bearer ${token}` },
 });
