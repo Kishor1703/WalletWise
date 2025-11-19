@@ -136,7 +136,7 @@ const Transactions = () => {
           <h2 className="text-xl font-semibold mb-4 text-gray-700">Overall Summary</h2>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
             <div>
-              <PieChart width={300} height={300}>
+              <PieChart width={500} height={300}>
                 <Pie
                   data={chartData}
                   cx="50%"
