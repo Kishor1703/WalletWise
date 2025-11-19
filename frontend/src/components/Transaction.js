@@ -26,7 +26,7 @@ const Transactions = () => {
           navigate('/login');
           return;
         }
-        const res = await axios.get('https://wallet-wise-g6b2.vercel.app/api/transactions', {
+        const res = await axios.get('https://localhost:5000/api/transactions', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setTransactions(res.data);
@@ -51,7 +51,7 @@ const Transactions = () => {
     try {
       const token = localStorage.getItem('token');
       const res = await axios.post(
-        'https://wallet-wise-g6b2.vercel.app/api/transactions',
+        'https://localhost:5000/api/transactions',
         { amount, category, type, description, person },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -72,7 +72,7 @@ const Transactions = () => {
   const deleteTransaction = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`https://wallet-wise-g6b2.vercel.app/api/transactions/${id}`, {
+      await axios.delete(`https://localhost:5000/api/transactions/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTransactions(transactions.filter((transaction) => transaction._id !== id));

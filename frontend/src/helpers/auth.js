@@ -14,6 +14,6 @@ if (token) {
         navigate('/login');
     }
 }
-axios.get('https://wallet-wise-g6b2.vercel.app/api/transactions', {
+axios.get('https://localhost:5000/api/transactions', {
     headers: { Authorization: `Bearer ${token}` },
 });
