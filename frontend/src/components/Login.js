@@ -11,7 +11,7 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false); // New loading state
   const navigate = useNavigate();
-   const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
 
   // Check if user is already logged in
   useEffect(() => {
@@ -72,7 +72,7 @@ const Login = () => {
           <img src={MyImage} alt="WalletWise" className="w-32 mb-6" />
           <h1 className="text-4xl font-extrabold mb-2">WalletWise</h1>
           <p className="text-center text-blue-100 max-w-xs">
-            Manage your money smarter 💰  
+            Manage your money smarter 💰
             Track, save, and grow effortlessly.
           </p>
         </div>
@@ -92,11 +92,14 @@ const Login = () => {
                 type="text"
                 placeholder="Username"
                 required
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className={`w-full p-4 pl-12 rounded-xl border focus:ring-2 focus:ring-blue-500 outline-none
-                  ${darkMode
+    ${darkMode
                     ? "bg-gray-800 border-gray-700 text-white"
                     : "bg-white border-gray-300"}`}
               />
+
               <span className="absolute left-4 top-1/2 -translate-y-1/2">👤</span>
             </div>
 
@@ -106,11 +109,14 @@ const Login = () => {
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className={`w-full p-4 pl-12 pr-12 rounded-xl border focus:ring-2 focus:ring-blue-500 outline-none
-                  ${darkMode
+    ${darkMode
                     ? "bg-gray-800 border-gray-700 text-white"
                     : "bg-white border-gray-300"}`}
               />
+
               <span className="absolute left-4 top-1/2 -translate-y-1/2">🔒</span>
 
               <button
