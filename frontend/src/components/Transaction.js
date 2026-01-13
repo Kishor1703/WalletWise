@@ -47,6 +47,7 @@ const Transactions = () => {
     fetchTransactions();
   }, [navigate]);
 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -117,8 +118,26 @@ const Transactions = () => {
 
   const hasChartData = chartData.some(item => item.value > 0);
 
+  const returned = totalReturning;
+const pending = Math.max(totalLending - totalReturning, 0);
 
-  const COLORS = ['#0088FE', '#00C49F'];
+const donutData = [
+  { name: 'Returned', value: returned },
+  { name: 'Pending', value: pending },
+];
+
+const DONUT_COLORS = ['#00C897', '#FF4D4F'];
+const hasDonutData = donutData.some(d => d.value > 0);
+
+const [darkMode, setDarkMode] = useState(
+  localStorage.getItem("theme") === "dark"
+);
+
+useEffect(() => {
+  localStorage.setItem("theme", darkMode ? "dark" : "light");
+}, [darkMode]);
+
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-200 via-indigo-200 to-purple-200">
@@ -130,203 +149,304 @@ const Transactions = () => {
   }
 
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-blue-100 to-purple-100 p-4 sm:p-6">
+ return (
+  <div
+    className={`min-h-screen p-4 sm:p-6 transition-colors duration-300
+      ${darkMode
+        ? "bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white"
+        : "bg-gradient-to-br from-indigo-100 via-blue-100 to-purple-100 text-gray-800"
+      }`}
+  >
 
-      {/* Header */}
-      <div className="max-w-7xl mx-auto mb-6 bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-3xl p-6 text-center shadow-lg">
-        <h1 className="text-3xl font-extrabold">WalletWise</h1>
-        <p className="text-indigo-100">Smart Transaction Tracker</p>
-      </div>
+    {/* Header */}
+    <div className="max-w-7xl mx-auto mb-6 relative bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-3xl p-6 text-center shadow-lg">
+      <h1 className="text-3xl font-extrabold">WalletWise</h1>
+      <p className="text-indigo-100">Smart Transaction Tracker</p>
 
-      {/* MAIN GRID */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* Dark mode toggle */}
+      <button
+        onClick={() => setDarkMode(!darkMode)}
+        className="absolute top-5 right-5 bg-white/20 backdrop-blur px-4 py-2 rounded-full text-lg"
+      >
+        {darkMode ? "☀️" : "🌙"}
+      </button>
+    </div>
 
-        {/* LEFT COLUMN */}
-        <div className="space-y-6">
+    {/* MAIN GRID */}
+    <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-          {/* Pie Chart Card */}
-          <div className="bg-white rounded-3xl shadow-lg p-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-800">
-              Overall Summary
-            </h2>
+      {/* LEFT COLUMN */}
+      <div className="space-y-6">
 
-            <div className="flex flex-col items-center">
-              <div className="w-full h-[320px] flex justify-center">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={chartData}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={100}
-                      labelLine
-                      label={({ name, percent }) =>
-                        `${name} ${(percent * 100).toFixed(0)}%`
-                      }
-                    >
-                      {chartData.map((_, index) => (
-                        <Cell
-                          key={index}
-                          fill={COLORS[index]}
-                        />
-                      ))}
-                    </Pie>
-                    <Legend verticalAlign="bottom" />
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
+        {/* Donut Chart */}
+        <div
+          className={`rounded-3xl shadow-lg p-6
+            ${darkMode ? "bg-gray-900" : "bg-white"}`}
+        >
+          <h2 className="text-xl font-semibold mb-4">
+            Overall Summary
+          </h2>
 
+          <div className="w-full h-[320px] flex justify-center items-center">
+            {hasDonutData ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={donutData}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={70}
+                    outerRadius={100}
+                    paddingAngle={3}
+                    label={({ name, percent }) =>
+                      `${name} ${(percent * 100).toFixed(0)}%`
+                    }
+                  >
+                    {donutData.map((_, index) => (
+                      <Cell key={index} fill={DONUT_COLORS[index]} />
+                    ))}
+                  </Pie>
 
-            </div>
-          </div>
+                  {/* Center text */}
+                  <text
+                    x="50%"
+                    y="48%"
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    className={`text-sm font-semibold ${
+                      darkMode ? "fill-gray-300" : "fill-gray-700"
+                    }`}
+                  >
+                    Pending
+                  </text>
+                  <text
+                    x="50%"
+                    y="58%"
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    className="text-lg font-bold fill-red-500"
+                  >
+                    ₹{pending}
+                  </text>
 
-          {/* Summary Numbers */}
-          <div className="bg-white rounded-3xl shadow-lg p-6 text-center space-y-2">
-            <p className="text-lg">
-              Total Given: <span className="font-semibold">₹{totalLending}</span>
-            </p>
-            <p className="text-lg">
-              Total Returned: <span className="font-semibold">₹{totalReturning}</span>
-            </p>
-            <p
-              className={`text-xl font-bold ${totalLending - totalReturning > 0
-                ? "text-red-600"
-                : "text-green-600"
-                }`}
-            >
-              Net: ₹{totalLending - totalReturning}
-            </p>
+                  <Tooltip />
+                  <Legend verticalAlign="bottom" />
+                </PieChart>
+              </ResponsiveContainer>
+            ) : (
+              <p className="text-gray-400">No data available</p>
+            )}
           </div>
         </div>
 
-        {/* RIGHT COLUMN */}
-        <div className="space-y-6">
+        {/* Summary Numbers */}
+        <div
+          className={`rounded-3xl shadow-lg p-6 text-center space-y-2
+            ${darkMode ? "bg-gray-900" : "bg-white"}`}
+        >
+          <p className="text-lg">
+            Total Given: <span className="font-semibold">₹{totalLending}</span>
+          </p>
+          <p className="text-lg">
+            Total Returned: <span className="font-semibold">₹{totalReturning}</span>
+          </p>
+          <p
+            className={`text-xl font-bold ${
+              totalLending - totalReturning > 0
+                ? "text-red-500"
+                : "text-green-500"
+            }`}
+          >
+            Net: ₹{totalLending - totalReturning}
+          </p>
+        </div>
+      </div>
 
-          {/* Add Transaction */}
-          <div className="bg-white rounded-3xl shadow-lg p-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-800">
-              Add Transaction
-            </h2>
+      {/* RIGHT COLUMN */}
+      <div className="space-y-6">
 
-            <form
-              onSubmit={handleSubmit}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-4"
-            >
-              <input
-                type="number"
-                placeholder="Amount"
-                value={amount}
-                onChange={(e) => setAmount(Number(e.target.value))}
-                required
-                className="p-3 rounded-xl border focus:ring-2 focus:ring-blue-500"
-              />
+        {/* Add Transaction */}
+        <div
+          className={`rounded-3xl shadow-lg p-6
+            ${darkMode ? "bg-gray-900" : "bg-white"}`}
+        >
+          <h2 className="text-xl font-semibold mb-4">
+            Add Transaction
+          </h2>
 
-              {/* <input
-              type="text"
-              placeholder="Category"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
+          <form
+            onSubmit={handleSubmit}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+          >
+            <input
+              type="number"
+              placeholder="Amount"
+              value={amount}
+              onChange={(e) => setAmount(Number(e.target.value))}
               required
-              className="p-3 rounded-xl border focus:ring-2 focus:ring-blue-500"
-            /> */}
+              className={`p-3 rounded-xl border outline-none
+                ${darkMode
+                  ? "bg-gray-800 border-gray-700 text-white"
+                  : "bg-white border-gray-300"}`}
+            />
 
-              <select
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-                className="p-3 rounded-xl border focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="lending">Money Given</option>
-                <option value="returning">Money Returned</option>
-              </select>
+            <select
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+              className={`p-3 rounded-xl border outline-none
+                ${darkMode
+                  ? "bg-gray-800 border-gray-700 text-white"
+                  : "bg-white border-gray-300"}`}
+            >
+              <option value="lending">Money Given</option>
+              <option value="returning">Money Returned</option>
+            </select>
 
-              <input
-                type="text"
-                placeholder="Description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="p-3 rounded-xl border focus:ring-2 focus:ring-blue-500"
-              />
+            <input
+              type="text"
+              placeholder="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className={`p-3 rounded-xl border outline-none
+                ${darkMode
+                  ? "bg-gray-800 border-gray-700 text-white"
+                  : "bg-white border-gray-300"}`}
+            />
 
-              <input
-                type="text"
-                placeholder="Person"
-                value={person}
-                onChange={(e) => setPerson(e.target.value)}
-                required
-                className="p-3 rounded-xl border focus:ring-2 focus:ring-blue-500 sm:col-span-2"
-              />
+            <input
+              type="text"
+              placeholder="Person"
+              value={person}
+              onChange={(e) => setPerson(e.target.value)}
+              required
+              className={`p-3 rounded-xl border outline-none sm:col-span-2
+                ${darkMode
+                  ? "bg-gray-800 border-gray-700 text-white"
+                  : "bg-white border-gray-300"}`}
+            />
 
-              <button
-                type="submit"
-                className="sm:col-span-2 bg-gradient-to-r from-indigo-600 to-blue-600 text-white py-3 rounded-xl font-semibold hover:scale-[1.02] transition"
-              >
-                Add Transaction
-              </button>
-            </form>
-          </div>
+            <button
+              type="submit"
+              className="sm:col-span-2 bg-gradient-to-r from-indigo-600 to-blue-600 text-white py-3 rounded-xl font-semibold hover:scale-[1.02] transition"
+            >
+              Add Transaction
+            </button>
+          </form>
+        </div>
+        {/* Transactions */}
+<div
+  className={`rounded-3xl shadow-lg p-6
+    ${darkMode ? "bg-gray-900" : "bg-white"}`}
+>
+  <h2 className="text-xl font-semibold mb-4">
+    Transactions
+  </h2>
 
-          {/* Transactions */}
-          <div className="bg-white rounded-3xl shadow-lg p-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-800">
-              Transactions
-            </h2>
+  {Object.entries(groupedTransactions).length === 0 && (
+    <p className="text-center text-gray-400">
+      No transactions yet
+    </p>
+  )}
 
-            {Object.entries(groupedTransactions).map(([person, data]) => (
-              <div key={person} className="mb-4 border rounded-2xl p-4">
-                <div
-                  onClick={() =>
-                    setSelectedPerson(selectedPerson === person ? null : person)
-                  }
-                  className="flex justify-between items-center cursor-pointer"
-                >
-                  <h3 className="font-semibold text-lg">{person}</h3>
-                  {selectedPerson === person ? <ChevronUp /> : <ChevronDown />}
-                </div>
+  {Object.entries(groupedTransactions).map(([person, data]) => (
+    <div
+      key={person}
+      className={`mb-4 border rounded-2xl p-4
+        ${darkMode ? "border-gray-700" : "border-gray-200"}`}
+    >
+      {/* Person Header */}
+      <div
+        onClick={() =>
+          setSelectedPerson(selectedPerson === person ? null : person)
+        }
+        className="flex justify-between items-center cursor-pointer"
+      >
+        <h3 className="font-semibold text-lg">
+          {person}
+        </h3>
+        {selectedPerson === person ? <ChevronUp /> : <ChevronDown />}
+      </div>
 
-                {selectedPerson === person && (
-                  <div className="mt-3 space-y-2">
-                    {data.transactions.map((t) => (
-                      <div key={t._id} className="flex justify-between">
-                        <span>₹{t.amount} • {t.category}</span>
-                        <button
-                          onClick={() => deleteTransaction(t._id)}
-                          className="text-red-500"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
-                    ))}
+      {/* Expanded Section */}
+      {selectedPerson === person && (
+        <div className="mt-4 space-y-3">
 
-                    <div className="pt-2 text-sm border-t">
-                      <p>Lent: ₹{data.lending}</p>
-                      <p>Returned: ₹{data.returning}</p>
-                      <p className="font-semibold">
-                        Net: ₹{data.lending - data.returning}
-                      </p>
-                    </div>
-                  </div>
+          {/* Individual Transactions */}
+          {data.transactions.map((t) => (
+            <div
+              key={t._id}
+              className="flex justify-between items-center"
+            >
+              <div>
+                <p className="font-medium">
+                  ₹{t.amount}
+                  <span className="text-sm text-gray-400">
+                    {" "}• {t.type === "lending" ? "Given" : "Returned"}
+                  </span>
+                </p>
+                {t.description && (
+                  <p className="text-sm text-gray-400">
+                    {t.description}
+                  </p>
                 )}
               </div>
-            ))}
+
+              <button
+                onClick={() => deleteTransaction(t._id)}
+                className="text-red-500 hover:text-red-600"
+              >
+                <Trash2 size={16} />
+              </button>
+            </div>
+          ))}
+
+          {/* Person Summary */}
+          <div
+            className={`pt-3 border-t text-sm
+              ${darkMode ? "border-gray-700" : "border-gray-200"}`}
+          >
+            <p>Lent: ₹{data.lending}</p>
+            <p>Returned: ₹{data.returning}</p>
+            <p
+              className={`font-semibold ${
+                data.lending - data.returning > 0
+                  ? "text-red-500"
+                  : "text-green-500"
+              }`}
+            >
+              Pending: ₹{data.lending - data.returning}
+            </p>
           </div>
 
-          {/* Logout */}
-          <div className="flex justify-center">
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-2 bg-red-500 text-white px-6 py-3 rounded-xl hover:bg-red-600"
-            >
-              <LogOut size={18} /> Logout
-            </button>
-          </div>
         </div>
+      )}
+    </div>
+  ))}
+</div>
+
       </div>
     </div>
-  );
+    {/* Logout */}
+<div
+  className={`flex justify-center rounded-3xl shadow-lg p-6
+    `}
+>
+  <button
+    onClick={handleLogout}
+    className="flex items-center gap-2 bg-red-500 text-white px-6 py-3 rounded-xl
+               hover:bg-red-600 transition font-semibold"
+  >
+    <LogOut size={18} />
+    Logout
+  </button>
+</div>
+  </div>
+  
+
+);
+
 
 
 
