@@ -115,168 +115,212 @@ const Transactions = () => {
   ];
 
   const COLORS = ['#0088FE', '#00C49F'];
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-50 to-blue-100">
-        <p className="text-blue-600 text-2xl font-semibold animate-pulse">Loading transactions...</p>
-      </div>
-    );
-  }
-
+if (loading) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 py-10 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto bg-white shadow-2xl rounded-2xl overflow-hidden">
-        <div className="p-6 bg-gradient-to-r from-blue-600 to-blue-400 text-white text-center">
-          <h1 className="text-3xl font-bold">WalletWise - Transaction Tracker</h1>
-        </div>
-
-        {/* Summary Chart */}
-        <div className="p-6">
-          <h2 className="text-xl font-semibold mb-4 text-gray-700">Overall Summary</h2>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            <div>
-              <PieChart width={500} height={300}>
-                <Pie
-                  data={chartData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                  outerRadius={100}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {chartData.map((_, index) => (
-                    <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </div>
-            <div className="text-gray-700">
-              <p className="text-lg">Total Lending: ₹{totalLending}</p>
-              <p className="text-lg">Total Returning: ₹{totalReturning}</p>
-              <p
-                className={`font-bold ${
-                  totalLending - totalReturning > 0 ? 'text-red-600' : 'text-green-600'
-                }`}
-              >
-                Net: ₹{totalLending - totalReturning}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Transaction Form */}
-        <div className="p-6">
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <input
-              type="number"
-              placeholder="Amount"
-              value={amount}
-              onChange={(e) => setAmount(Number(e.target.value))}
-              required
-              className="border px-4 py-2 rounded-md"
-            />
-            <input
-              type="text"
-              placeholder="Category"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              required
-              className="border px-4 py-2 rounded-md"
-            />
-            <select
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              className="border px-4 py-2 rounded-md"
-            >
-              <option value="lending">Lending</option>
-              <option value="returning">Returning</option>
-            </select>
-            <input
-              type="text"
-              placeholder="Description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="border px-4 py-2 rounded-md"
-            />
-            <input
-              type="text"
-              placeholder="Person"
-              value={person}
-              onChange={(e) => setPerson(e.target.value)}
-              required
-              className="border px-4 py-2 rounded-md col-span-2"
-            />
-            <button
-              type="submit"
-              className="col-span-2 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700"
-            >
-              Add Transaction
-            </button>
-          </form>
-        </div>
-
-        {/* Transaction List */}
-        <div className="p-6">
-          {Object.entries(groupedTransactions).map(([person, data]) => (
-            <div key={person} className="mb-6 p-4 border rounded-lg bg-gray-50">
-              <div
-                onClick={() =>
-                  setSelectedPerson(selectedPerson === person ? null : person)
-                }
-                className="flex justify-between items-center cursor-pointer"
-              >
-                <h3 className="text-lg font-semibold">{person}</h3>
-                {selectedPerson === person ? <ChevronUp /> : <ChevronDown />}
-              </div>
-              {selectedPerson === person && (
-                <div className="mt-2">
-                  {data.transactions.map((t) => (
-                    <div key={t._id} className="flex justify-between items-center py-1">
-                      <div>
-                        <p className="text-gray-800">
-                          ₹{t.amount} - {t.category}
-                        </p>
-                        {t.description && (
-                          <p className="text-sm text-gray-500">{t.description}</p>
-                        )}
-                      </div>
-                      <button
-                        onClick={() => deleteTransaction(t._id)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  ))}
-                  <div className="text-sm text-gray-600 mt-2">
-                    <p>Lent: ₹{data.lending}</p>
-                    <p>Returned: ₹{data.returning}</p>
-                    <p className={`font-semibold ${data.lending - data.returning > 0 ? 'text-red-600' : 'text-green-600'}`}>
-                      Net: ₹{data.lending - data.returning}
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        <div className="flex justify-center mb-6">
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-red-600"
-          >
-            <LogOut size={18} /> Logout
-          </button>
-        </div>
-      </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-200 via-indigo-200 to-purple-200">
+      <p className="text-blue-700 text-2xl font-semibold animate-pulse">
+        Loading transactions...
+      </p>
     </div>
   );
+}
+
+
+ return (
+  <div className="min-h-screen bg-gradient-to-br from-blue-200 via-indigo-200 to-purple-200 py-10 px-4">
+    
+    <div className="max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
+
+      {/* Header */}
+      <div className="p-6 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center">
+        <h1 className="text-3xl font-extrabold">WalletWise</h1>
+        <p className="text-blue-100 mt-1">Transaction Tracker</p>
+      </div>
+
+      {/* Summary Section */}
+      <div className="p-6">
+        <h2 className="text-xl font-semibold mb-4 text-gray-700">
+          Overall Summary
+        </h2>
+
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-8">
+          <PieChart width={420} height={280}>
+            <Pie
+              data={chartData}
+              cx="50%"
+              cy="50%"
+              outerRadius={100}
+              dataKey="value"
+              label={({ name, percent }) =>
+                `${name} ${(percent * 100).toFixed(0)}%`
+              }
+            >
+              {chartData.map((_, index) => (
+                <Cell key={index} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart>
+
+          <div className="text-gray-700 space-y-2 text-lg">
+            <p>Total Money Given: ₹{totalLending}</p>
+            <p>Total Money Returned: ₹{totalReturning}</p>
+            <p
+              className={`font-bold ${
+                totalLending - totalReturning > 0
+                  ? "text-red-600"
+                  : "text-green-600"
+              }`}
+            >
+              Net: ₹{totalLending - totalReturning}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Add Transaction */}
+      <div className="p-6 border-t">
+        <h2 className="text-xl font-semibold mb-4 text-gray-700">
+          Add Transaction
+        </h2>
+
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 md:grid-cols-2 gap-4"
+        >
+          <input
+            type="number"
+            placeholder="Amount"
+            value={amount}
+            onChange={(e) => setAmount(Number(e.target.value))}
+            required
+            className="p-3 rounded-xl border focus:ring-2 focus:ring-blue-500 outline-none"
+          />
+
+          <input
+            type="text"
+            placeholder="Category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            required
+            className="p-3 rounded-xl border focus:ring-2 focus:ring-blue-500 outline-none"
+          />
+
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            className="p-3 rounded-xl border focus:ring-2 focus:ring-blue-500 outline-none"
+          >
+            <option value="lending">Money Given</option>
+            <option value="returning">Money Returned</option>
+          </select>
+
+          <input
+            type="text"
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="p-3 rounded-xl border focus:ring-2 focus:ring-blue-500 outline-none"
+          />
+
+          <input
+            type="text"
+            placeholder="Person"
+            value={person}
+            onChange={(e) => setPerson(e.target.value)}
+            required
+            className="p-3 rounded-xl border focus:ring-2 focus:ring-blue-500 outline-none col-span-2"
+          />
+
+          <button
+            type="submit"
+            className="col-span-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 transition"
+          >
+            Add Transaction
+          </button>
+        </form>
+      </div>
+
+      {/* Transactions List */}
+      <div className="p-6 border-t">
+        {Object.entries(groupedTransactions).map(([person, data]) => (
+          <div
+            key={person}
+            className="mb-5 p-4 rounded-2xl bg-gray-50 border"
+          >
+            <div
+              onClick={() =>
+                setSelectedPerson(selectedPerson === person ? null : person)
+              }
+              className="flex justify-between items-center cursor-pointer"
+            >
+              <h3 className="text-lg font-semibold text-gray-800">
+                {person}
+              </h3>
+              {selectedPerson === person ? <ChevronUp /> : <ChevronDown />}
+            </div>
+
+            {selectedPerson === person && (
+              <div className="mt-3 space-y-2">
+                {data.transactions.map((t) => (
+                  <div
+                    key={t._id}
+                    className="flex justify-between items-center"
+                  >
+                    <div>
+                      <p className="font-medium text-gray-800">
+                        ₹{t.amount} • {t.category}
+                      </p>
+                      {t.description && (
+                        <p className="text-sm text-gray-500">
+                          {t.description}
+                        </p>
+                      )}
+                    </div>
+
+                    <button
+                      onClick={() => deleteTransaction(t._id)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
+                ))}
+
+                <div className="pt-3 text-sm">
+                  <p>Lent: ₹{data.lending}</p>
+                  <p>Returned: ₹{data.returning}</p>
+                  <p
+                    className={`font-semibold ${
+                      data.lending - data.returning > 0
+                        ? "text-red-600"
+                        : "text-green-600"
+                    }`}
+                  >
+                    Net: ₹{data.lending - data.returning}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Logout */}
+      <div className="flex justify-center p-6 border-t">
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 bg-red-500 text-white px-6 py-3 rounded-xl hover:bg-red-600 transition"
+        >
+          <LogOut size={18} />
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
 };
 
 export default Transactions;
