@@ -36,14 +36,14 @@ const Register = () => {
   return (
     <div
       className={`min-h-screen flex items-center justify-center px-4 transition-colors duration-300
-      ${darkMode
+       ${darkMode
           ? "bg-gradient-to-br from-gray-900 via-gray-800 to-black"
           : "bg-gradient-to-br from-blue-200 via-indigo-200 to-purple-200"
         }`}
     >
       <button
         onClick={toggleTheme}
-        className="absolute top-5 right-5 bg-white/20 backdrop-blur px-4 py-2 rounded-full text-lg"
+        className="absolute top-5 right-30 bg-black/20 backdrop-blur px-4 py-2 rounded-full text-lg"
       >
         {darkMode ? "☀️" : "🌙"}
       </button>

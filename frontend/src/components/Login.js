@@ -54,7 +54,7 @@ const Login = () => {
     >
       <button
         onClick={toggleTheme}
-        className="absolute top-5 right-5 bg-white/20 backdrop-blur px-4 py-2 rounded-full text-lg"
+        className="absolute top-5 right-30 bg-white/20 backdrop-blur px-4 py-2 rounded-full text-lg"
       >
         {darkMode ? "☀️" : "🌙"}
       </button>
@@ -70,7 +70,13 @@ const Login = () => {
       >
 
         {/* LEFT – LOGO */}
-        <div className="flex flex-col items-center justify-center bg-gradient-to-br from-blue-600 to-indigo-600 p-10 text-white">
+        <div
+          className={`flex flex-col items-center justify-center p-10 transition-colors duration-300
+          ${darkMode
+              ? "bg-gradient-to-br from-gray-800 to-gray-700 text-white"
+              : "bg-gradient-to-br from-blue-600 to-indigo-600 text-white"
+            }`}
+        >
           <img src={MyImage} alt="WalletWise" className="w-32 mb-6" />
           <h1 className="text-4xl font-extrabold mb-2">WalletWise</h1>
           <p className="text-center text-blue-100 max-w-xs">
@@ -126,7 +132,7 @@ const Login = () => {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-lg"
               >
-                {showPassword ? "🙈" : "👁️"}
+                {showPassword ? "🫣" : "😃"}
               </button>
             </div>
 
