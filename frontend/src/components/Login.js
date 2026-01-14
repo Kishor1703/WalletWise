@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import MyImage from '../assets/logo.png';
 import { motion } from "framer-motion";
+import { useTheme } from "../context/ThemeContext";
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -11,7 +12,8 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false); // New loading state
   const navigate = useNavigate();
-  const [darkMode, setDarkMode] = useState(false);
+  // const [darkMode, setDarkMode] = useState(false);
+  const { darkMode, toggleTheme } = useTheme();
 
   // Check if user is already logged in
   useEffect(() => {
@@ -50,13 +52,13 @@ const Login = () => {
           : "bg-gradient-to-br from-blue-200 via-indigo-200 to-purple-200"
         }`}
     >
-      {/* Dark mode toggle */}
       <button
-        onClick={() => setDarkMode(!darkMode)}
-        className="absolute top-6 right-6 text-xl bg-white/30 backdrop-blur px-4 py-2 rounded-full shadow"
+        onClick={toggleTheme}
+        className="absolute top-5 right-5 bg-white/20 backdrop-blur px-4 py-2 rounded-full text-lg"
       >
         {darkMode ? "☀️" : "🌙"}
       </button>
+
 
       {/* Card */}
       <motion.div
