@@ -167,7 +167,7 @@ const Transactions = () => {
 
         <button
           onClick={toggleTheme}
-          className="absolute top-5 right-30 bg-white/20 backdrop-blur px-4 py-2 rounded-full text-lg"
+          className="absolute top-5 right-10 bg-white/20 backdrop-blur px-4 py-2 rounded-full text-lg"
         >
           {darkMode ? "☀️" : "🌙"}
         </button>
