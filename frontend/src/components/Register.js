@@ -109,7 +109,7 @@ const Register = () => {
             </div>
 
             {/* Email */}
-            <div className="relative">
+            {/* <div className="relative">
               <input
                 type="email"
                 placeholder="Email"
@@ -125,7 +125,7 @@ const Register = () => {
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
                 📧
               </span>
-            </div>
+            </div> */}
 
             {/* Password */}
             <div className="relative">
