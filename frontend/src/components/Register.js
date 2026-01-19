@@ -7,7 +7,7 @@ import { useTheme } from "../context/ThemeContext";
 const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  // const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('  https://walletwise-backend-ls6d.onrender.com/api/auth/register', { username, password });
+      const res = await axios.post('  https://walletwise-backend-ls6d.onrender.com/api/auth/register', { username, password, email });
       localStorage.setItem('token', res.data.token);
       setSuccess('Successfully registered!');
       setTimeout(() => {
@@ -109,7 +109,7 @@ const Register = () => {
             </div>
 
             {/* Email */}
-            {/* <div className="relative">
+            <div className="relative">
               <input
                 type="email"
                 placeholder="Email"
@@ -125,7 +125,7 @@ const Register = () => {
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
                 📧
               </span>
-            </div> */}
+            </div>
 
             {/* Password */}
             <div className="relative">
