@@ -17,7 +17,7 @@ const Transactions = () => {
   const [person, setPerson] = useState('');
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [loading, setLoading] = useState(true);
-  const setError = useState(null);
+  const setError = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -113,10 +113,10 @@ const Transactions = () => {
     .filter((t) => t.type === 'returning')
     .reduce((sum, t) => sum + Number(t.amount), 0);
 
-  const chartData = [
-    { name: 'Money Given', value: totalLending - totalReturning },
-    { name: 'Money Returned', value: totalReturning },
-  ];
+  // const chartData = [
+  //   { name: 'Money Given', value: totalLending - totalReturning },
+  //   { name: 'Money Returned', value: totalReturning },
+  // ];
 
   // const hasChartData = chartData.some(item => item.value > 0);
 
