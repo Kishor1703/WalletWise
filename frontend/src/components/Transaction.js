@@ -17,7 +17,7 @@ const Transactions = () => {
   const [person, setPerson] = useState('');
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const setError = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -118,7 +118,7 @@ const Transactions = () => {
     { name: 'Money Returned', value: totalReturning },
   ];
 
-  const hasChartData = chartData.some(item => item.value > 0);
+  // const hasChartData = chartData.some(item => item.value > 0);
 
   const returned = totalReturning;
   const pending = Math.max(totalLending - totalReturning, 0);
