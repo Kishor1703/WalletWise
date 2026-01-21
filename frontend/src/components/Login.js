@@ -9,7 +9,7 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const setErrorMessage = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false); // New loading state
   const navigate = useNavigate();
   // const [darkMode, setDarkMode] = useState(false);
@@ -36,7 +36,7 @@ const Login = () => {
       } else if (error.response && error.response.status === 401) {
         setErrorMessage('Incorrect password. Please try again.');
       } else {
-        setErrorMessage('Login error. Please try again.');
+        setErrorMessage('Login error. Please check username and password.');
       }
     }
     finally {
@@ -144,7 +144,11 @@ const Login = () => {
               {loading ? "Logging in..." : "Login"}
             </button>
           </form>
-
+          {errorMessage && (
+            <div className="mb-4 text-red-500 font-medium text-center">
+              {errorMessage}
+            </div>
+          )}
           <p className="text-center mt-6 text-gray-400">
             No account?
             <a href="/register" className="text-blue-500 font-semibold ml-1">
@@ -152,6 +156,8 @@ const Login = () => {
             </a>
           </p>
         </div>
+
+
       </motion.div>
     </div>
   );

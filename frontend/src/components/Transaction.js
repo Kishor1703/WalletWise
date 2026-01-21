@@ -17,9 +17,9 @@ const Transactions = () => {
   const [person, setPerson] = useState('');
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [loading, setLoading] = useState(true);
-  const setError = useState(null);
+  const [, setError] = useState(null);
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     const fetchTransactions = async () => {
       setLoading(true);
@@ -47,7 +47,7 @@ const Transactions = () => {
     };
 
     fetchTransactions();
-  }, [navigate,setError]);
+  }, [navigate]);
 
 
   const handleSubmit = async (e) => {
