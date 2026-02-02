@@ -77,7 +77,7 @@ const Login = () => {
               : "bg-gradient-to-br from-blue-600 to-indigo-600 text-white"
             }`}
         >
-          <img src={MyImage} alt="WalletWise" className="w-32 mb-6" />
+          <img src={MyImage} alt="WalletWise" className="w-32 mb-6 rounded-xl" />
           <h1 className="text-4xl font-extrabold mb-2">WalletWise</h1>
           <p className="text-center text-blue-100 max-w-xs">
             Manage your money smarter 💰

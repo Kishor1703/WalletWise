@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import MyImage from '../assets/logo.png';
 import { useTheme } from "../context/ThemeContext";
+import { motion } from "framer-motion";
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -17,7 +18,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('  https://walletwise-backend-ls6d.onrender.com/api/auth/register', { username, password });
+      const res = await axios.post('https://walletwise-backend-ls6d.onrender.com/api/auth/register', { username, password });
       localStorage.setItem('token', res.data.token);
       setSuccess('Successfully registered!');
       setTimeout(() => {
@@ -36,6 +37,7 @@ const Register = () => {
   return (
     <div
       className={`min-h-screen flex items-center justify-center px-4 transition-colors duration-300
+        
        ${darkMode
           ? "bg-gradient-to-br from-gray-900 via-gray-800 to-black"
           : "bg-gradient-to-br from-blue-200 via-indigo-200 to-purple-200"
@@ -50,9 +52,12 @@ const Register = () => {
 
 
       {/* Main Card */}
-      <div
-        className={`w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2 transition-colors duration-300
-        ${darkMode ? "bg-gray-900" : "bg-white"}`}
+     <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className={`w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 rounded-3xl overflow-hidden shadow-2xl
+          ${darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-800"}`}
       >
 
         {/* 🔵 LEFT – BRANDING */}
@@ -66,7 +71,7 @@ const Register = () => {
           <img
             src={MyImage}
             alt="WalletWise Logo"
-            className="w-32 mb-6 drop-shadow-lg"
+            className="w-32 mb-6 drop-shadow-lg rounded-xl"
           />
 
           <h1 className="text-4xl font-extrabold mb-2">WalletWise</h1>
@@ -177,8 +182,9 @@ const Register = () => {
             </a>
           </p>
         </div>
+      </motion.div>
       </div>
-    </div>
+  
   );
 
 

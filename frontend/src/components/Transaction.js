@@ -6,6 +6,7 @@ import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import { ChevronDown, ChevronUp, Trash2, LogOut } from 'lucide-react';
 import { ResponsiveContainer } from 'recharts';
 import { useTheme } from "../context/ThemeContext";
+import { motion } from "framer-motion";
 
 const Transactions = () => {
   const [transactions, setTransactions] = useState([]);
@@ -152,7 +153,10 @@ const Transactions = () => {
 
 
   return (
-    <div
+    <motion.div
+     initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
       className={`min-h-screen p-4 sm:p-6 transition-colors duration-300
       ${darkMode
           ? "bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white"
@@ -441,7 +445,7 @@ const Transactions = () => {
           Logout
         </button>
       </div>
-    </div>
+    </motion.div>
 
 
   );
