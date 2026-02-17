@@ -1,29 +1,37 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { Moon, Sun, User, Lock, Eye, EyeOff } from 'lucide-react';
 import MyImage from '../assets/logo.png';
-import { useTheme } from "../context/ThemeContext";
-import { motion } from "framer-motion";
+import { useTheme } from '../context/ThemeContext';
 
 const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  // const [email, setEmail] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  // const [darkMode, setDarkMode] = useState(false);
   const { darkMode, toggleTheme } = useTheme();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    setSuccess('');
+    setLoading(true);
+
     try {
-      const res = await axios.post('https://walletwise-backend-ls6d.onrender.com/api/auth/register', { username, password });
+      const res = await axios.post('https://walletwise-backend-ls6d.onrender.com/api/auth/register', {
+        username,
+        password,
+      });
       localStorage.setItem('token', res.data.token);
       setSuccess('Successfully registered!');
       setTimeout(() => {
         navigate('/login');
-      }, 1000); // Redirect to login page after 2 seconds
+      }, 1000);
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
         setError(error.response.data.message);
@@ -31,163 +39,130 @@ const Register = () => {
         setError('Registration failed. Please try again.');
       }
       console.error('Registration error:', error.response?.data?.message || error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div
-      className={`min-h-screen flex items-center justify-center px-4 transition-colors duration-300
-        
-       ${darkMode
-          ? "bg-gradient-to-br from-gray-900 via-gray-800 to-black"
-          : "bg-gradient-to-br from-blue-200 via-indigo-200 to-purple-200"
-        }`}
+      className={`min-h-screen flex items-center justify-center p-4 transition-colors duration-300 ${
+        darkMode
+          ? 'bg-gradient-to-br from-gray-900 via-slate-900 to-black'
+          : 'bg-gradient-to-br from-sky-100 via-indigo-100 to-cyan-100'
+      }`}
     >
       <button
         onClick={toggleTheme}
-        className="absolute top-5 right-30 bg-black/20 backdrop-blur px-4 py-2 rounded-full text-lg"
+        aria-label="Toggle theme"
+        className="absolute top-5 right-5 bg-white/20 hover:bg-white/30 border border-white/25 backdrop-blur p-2 rounded-full transition"
       >
-        {darkMode ? "☀️" : "🌙"}
+        {darkMode ? <Sun size={18} className="text-white" /> : <Moon size={18} className="text-slate-700" />}
       </button>
 
-
-      {/* Main Card */}
-     <motion.div
-        initial={{ opacity: 0, y: 40 }}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className={`w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 rounded-3xl overflow-hidden shadow-2xl
-          ${darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-800"}`}
+        transition={{ duration: 0.55 }}
+        className={`w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 rounded-3xl overflow-hidden shadow-2xl border ${
+          darkMode ? 'bg-gray-900 text-white border-gray-700/70' : 'bg-white text-gray-800 border-white/70'
+        }`}
       >
-
-        {/* 🔵 LEFT – BRANDING */}
         <div
-          className={`flex flex-col items-center justify-center p-10 transition-colors duration-300
-          ${darkMode
-              ? "bg-gradient-to-br from-gray-800 to-gray-700 text-white"
-              : "bg-gradient-to-br from-blue-600 to-indigo-600 text-white"
-            }`}
+          className={`relative flex flex-col items-center justify-center p-10 ${
+            darkMode
+              ? 'bg-gradient-to-br from-indigo-700 to-blue-900'
+              : 'bg-gradient-to-br from-indigo-600 to-sky-600'
+          } text-white`}
         >
-          <img
-            src={MyImage}
-            alt="WalletWise Logo"
-            className="w-32 mb-6 drop-shadow-lg rounded-xl"
-          />
-
-          <h1 className="text-4xl font-extrabold mb-2">WalletWise</h1>
-          <p className="text-center max-w-xs text-white/80">
-            Start managing your money smarter 💰
+          <div className="absolute -right-14 -top-14 h-52 w-52 rounded-full bg-white/10 blur-2xl" />
+          <div className="absolute -left-16 -bottom-14 h-48 w-48 rounded-full bg-cyan-300/20 blur-2xl" />
+          <img src={MyImage} alt="WalletWise Logo" className="w-32 mb-6 rounded-2xl shadow-lg z-10" />
+          <h1 className="text-4xl font-extrabold mb-2 z-10">WalletWise</h1>
+          <p className="text-center text-white/85 max-w-xs z-10">
+            Start managing your money smarter.
             Create your account today.
           </p>
         </div>
 
-        {/* ⚪ RIGHT – REGISTER FORM */}
-        <div className="p-10 flex flex-col justify-center">
-
-          <h2 className={`text-2xl font-bold mb-2 ${darkMode ? "text-white" : "text-gray-800"}`}>
-            Create your account
-          </h2>
-
-          <p className={`${darkMode ? "text-gray-400" : "text-gray-500"} mb-6`}>
-            Join WalletWise and take control of your finances.
+        <div className="p-8 sm:p-10 flex flex-col justify-center">
+          <h2 className="text-2xl font-bold mb-2">Create your account</h2>
+          <p className={`${darkMode ? 'text-gray-400' : 'text-gray-500'} mb-6`}>
+            Join WalletWise and track your personal transactions easily.
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-
-            {/* Username */}
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                <User size={18} />
+              </span>
               <input
                 type="text"
                 placeholder="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
-                className={`w-full p-4 pl-12 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none
-                ${darkMode
-                    ? "bg-gray-800 border border-gray-700 text-white placeholder-gray-400"
-                    : "bg-white border border-gray-300"
-                  }`}
+                className={`w-full p-4 pl-11 rounded-xl border outline-none focus:ring-2 focus:ring-blue-500/40 ${
+                  darkMode ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400' : 'bg-white border-gray-300'
+                }`}
               />
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                👤
-              </span>
             </div>
 
-            {/* Email */}
-            {/* <div className="relative">
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className={`w-full p-4 pl-12 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none
-                ${darkMode
-                    ? "bg-gray-800 border border-gray-700 text-white placeholder-gray-400"
-                    : "bg-white border border-gray-300"
-                  }`}
-              />
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                📧
-              </span>
-            </div> */}
-
-            {/* Password */}
             <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                <Lock size={18} />
+              </span>
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className={`w-full p-4 pl-12 pr-12 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none
-                ${darkMode
-                    ? "bg-gray-800 border border-gray-700 text-white placeholder-gray-400"
-                    : "bg-white border border-gray-300"
-                  }`}
+                className={`w-full p-4 pl-11 pr-12 rounded-xl border outline-none focus:ring-2 focus:ring-blue-500/40 ${
+                  darkMode ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400' : 'bg-white border-gray-300'
+                }`}
               />
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                🔒
-              </span>
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-500"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
             </div>
 
-            {/* Register Button */}
+            {error && (
+              <p className="rounded-xl border border-red-300/50 bg-red-100/40 text-red-600 px-4 py-3 text-sm">
+                {error}
+              </p>
+            )}
+
+            {success && (
+              <p className="rounded-xl border border-green-300/50 bg-green-100/40 text-green-700 px-4 py-3 text-sm">
+                {success}
+              </p>
+            )}
+
             <button
               type="submit"
-              className="w-full p-4 rounded-xl font-semibold text-white transition
-              bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+              disabled={loading}
+              className="w-full p-4 rounded-xl font-semibold text-white transition bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-95 disabled:opacity-60"
             >
-              Register
+              {loading ? 'Creating account...' : 'Register'}
             </button>
           </form>
 
-          {/* Messages */}
-          {error && (
-            <p className="text-center text-red-500 mt-4 font-medium">
-              {error}
-            </p>
-          )}
-
-          {success && (
-            <p className="text-center text-green-500 mt-4 font-medium">
-              {success}
-            </p>
-          )}
-
-          {/* Login Redirect */}
-          <p className={`${darkMode ? "text-gray-400" : "text-gray-600"} text-center mt-6`}>
+          <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'} text-center mt-6`}>
             Already registered?
-            <a href="/login" className="text-blue-500 font-semibold ml-1 hover:underline">
+            <Link to="/login" className="text-blue-500 font-semibold ml-1 hover:underline">
               Login here
-            </a>
+            </Link>
           </p>
         </div>
       </motion.div>
-      </div>
-  
+    </div>
   );
-
-
 };
 
 export default Register;
