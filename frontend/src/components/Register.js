@@ -25,7 +25,7 @@ const Register = () => {
     try {
       const res = await axios.post('https://walletwise-backend-ls6d.onrender.com/api/auth/register', {
         username,
-        password,
+        password
       });
       localStorage.setItem('token', res.data.token);
       setSuccess('Successfully registered!');
@@ -33,12 +33,17 @@ const Register = () => {
         navigate('/login');
       }, 1000);
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.message) {
-        setError(error.response.data.message);
+      const serverMessage = error.response?.data?.message;
+
+      if (serverMessage) {
+        setError(serverMessage);
+      } else if (error.response?.status >= 500) {
+        setError('The server is having trouble right now. Please try again in a moment.');
       } else {
         setError('Registration failed. Please try again.');
       }
-      console.error('Registration error:', error.response?.data?.message || error.message);
+
+      console.error('Registration error:', serverMessage || error.message);
     } finally {
       setLoading(false);
     }

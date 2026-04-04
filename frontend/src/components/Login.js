@@ -36,6 +36,8 @@ const Login = () => {
         setErrorMessage('User does not exist. Please register.');
       } else if (error.response && error.response.status === 401) {
         setErrorMessage('Incorrect password. Please try again.');
+      } else if (error.response && error.response.status >= 500) {
+        setErrorMessage('The server is having trouble right now. Please try again in a moment.');
       } else {
         setErrorMessage('Login error. Please check username and password.');
       }
