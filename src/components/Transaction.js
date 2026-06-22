@@ -22,7 +22,6 @@ const Transactions = () => {
   const [transactions, setTransactions] = useState([]);
   const { darkMode, toggleTheme } = useTheme();
   const [amount, setAmount] = useState('');
-  const [category, setCategory] = useState('');
   const [type, setType] = useState('lending');
   const [description, setDescription] = useState('');
   const [person, setPerson] = useState('');
@@ -64,21 +63,28 @@ const Transactions = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
+      const trimmedDescription = description.trim();
+      const trimmedPerson = person.trim();
       const res = await axios.post(
         'https://walletwise-backend.vercel.app/api/transactions',
-        { amount, category, type, description, person },
+        {
+          amount,
+          type,
+          description: trimmedDescription || undefined,
+          person: trimmedPerson,
+        },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setTransactions([...transactions, res.data]);
       setAmount('');
-      setCategory('');
       setType('lending');
       setDescription('');
       setPerson('');
       toast.success('Transaction added successfully.');
     } catch (error) {
-      setError('Error adding transaction');
-      toast.error('Error adding transaction.');
+      const message = error.response?.data?.message || 'Error adding transaction';
+      setError(message);
+      toast.error(message);
       console.error(error.response?.data?.message || error.message);
     }
   };
