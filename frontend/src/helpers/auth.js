@@ -14,6 +14,6 @@ if (token) {
         navigate('/login');
     }
 }
-axios.get('https://walletwise-backend-ls6d.onrender.com/api/transactions', {
+axios.get('https://walletwise-backend.vercel.app/api/transactions', {
     headers: { Authorization: `Bearer ${token}` },
 });

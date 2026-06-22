@@ -40,7 +40,7 @@ const Transactions = () => {
           navigate('/login');
           return;
         }
-        const res = await axios.get('https://walletwise-backend-ls6d.onrender.com/api/transactions', {
+        const res = await axios.get('https://walletwise-backend.vercel.app/api/transactions', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setTransactions(res.data);
@@ -65,7 +65,7 @@ const Transactions = () => {
     try {
       const token = localStorage.getItem('token');
       const res = await axios.post(
-        'https://walletwise-backend-ls6d.onrender.com/api/transactions',
+        'https://walletwise-backend.vercel.app/api/transactions',
         { amount, category, type, description, person },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -86,7 +86,7 @@ const Transactions = () => {
   const deleteTransaction = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`https://walletwise-backend-ls6d.onrender.com/api/transactions/${id}`, {
+      await axios.delete(`https://walletwise-backend.vercel.app/api/transactions/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTransactions(transactions.filter((transaction) => transaction._id !== id));

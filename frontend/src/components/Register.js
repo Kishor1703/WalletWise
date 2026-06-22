@@ -23,7 +23,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post('https://walletwise-backend-ls6d.onrender.com/api/auth/register', {
+      const res = await axios.post('https://walletwise-backend.vercel.app/api/auth/register', {
         username,
         password
       });

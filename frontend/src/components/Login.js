@@ -28,7 +28,7 @@ const Login = () => {
     setErrorMessage('');
 
     try {
-      const res = await axios.post('https://walletwise-backend-ls6d.onrender.com/api/auth/login', { username, password });
+      const res = await axios.post('https://walletwise-backend.vercel.app/api/auth/login', { username, password });
       localStorage.setItem('token', res.data.token);
       navigate('/transactions');
     } catch (error) {
